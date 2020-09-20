@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>屏幕共享</title>
+    <script type="text/javascript" src="jquery.2.1.4.min.js"></script>
+    <script type="text/javascript">
+    	window.onload = function(){
+
+    		// 版本一，使用xmlhttp
+    		function getdesktop(){
+
+    			//20200831，第一版
+    			var xmlhttp;
+				xmlhttp=new XMLHttpRequest();
+				xmlhttp.open("GET","./getdesktop/",true);
+				// 返回类型是二进制
+				xmlhttp.responseType = "blob";
+				xmlhttp.onload = function(){
+				    // console.log(this.response);
+				    if (this.status == 200) {
+				        var blob = this.response;
+				        var img = document.createElement("img");
+
+				        img.onload = function(e) {
+				        	// 图片加载完之后销毁创建的URL对象
+				        	console.log('sss')
+				            window.URL.revokeObjectURL(img.src);
+				        };
+				        var imgSrc = window.URL.createObjectURL(blob);
+				        $('#img').prop({src:imgSrc})
+				        window.URL.revokeObjectURL(img.src);
+
+				    }
+				}
+				xmlhttp.send();
+
+    		}
+    		// 版本二，使用
+    		function getdesktop2(){
+    			
+   				var img_src ='./getdesktop/?t='+Math.random(); 
+
+   				$('#img').prop({"src":img_src})
+    		}
+
+    		setInterval(getdesktop2,200)
+    		//getdesktop2()
+
+    	}
+    </script>
+</head>
+<body>
+    <div>屏幕共享</div>
+    <div id="div_img"><img id="img" src=""></div>
+</body>
+</html>
